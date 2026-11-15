@@ -1,0 +1,41 @@
+/* Custom Accessibility & Role Styling */
+.role-btn {
+    border-color: #cbd5e1;
+    color: #475569;
+    background-color: #ffffff;
+}
+
+.role-btn.active-role {
+    border-color: #0d9488;
+    background-color: #f0fdfa;
+    color: #0f766e;
+    box-shadow: 0 2px 6px rgba(13, 148, 136, 0.15);
+}
+
+/* Elderly Mode High-Readability Scaling */
+body.elderly-mode .med-title {
+    font-size: 1.35rem;
+    line-height: 1.75rem;
+}
+
+body.elderly-mode .med-instruction {
+    font-size: 1rem;
+}
+
+body.elderly-mode .action-btn-lg {
+    padding-top: 0.85rem;
+    padding-bottom: 0.85rem;
+    font-size: 1rem;
+}
+
+/* Smooth Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 9999px;
+}

@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CarePulse Pro | Shared Healthcare & Proactive Elderly Ecosystem</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased">
+
+    <!-- Auth Modal: Multi-User Registration & Login -->
+    <div id="auth-screen" class="fixed inset-0 bg-gradient-to-br from-teal-950 via-slate-900 to-indigo-950 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8 border border-slate-100">
+            <div class="w-14 h-14 bg-teal-100 text-teal-700 rounded-2xl flex items-center justify-center mx-auto mb-3 text-2xl shadow-inner">
+                <i class="fa-solid fa-heart-pulse"></i>
+            </div>
+            <h1 class="text-2xl font-extrabold text-slate-900 text-center">CarePulse Pro</h1>
+            <p class="text-xs text-slate-500 text-center mt-1">Shared Healthcare, Live Camera & Proactive Alert Portal</p>
+            
+            <!-- Role Selector -->
+            <div class="grid grid-cols-2 gap-2 mt-5 bg-slate-100 p-1.5 rounded-xl">
+                <button type="button" onclick="setLoginRole('elderly')" id="btn-role-elderly" class="py-2 text-xs font-bold rounded-lg bg-white text-teal-700 shadow transition">
+                    <i class="fa-solid fa-person-cane mr-1"></i> Elderly Patient
+                </button>
+                <button type="button" onclick="setLoginRole('caretaker')" id="btn-role-caretaker" class="py-2 text-xs font-bold rounded-lg text-slate-500 transition">
+                    <i class="fa-solid fa-user-shield mr-1"></i> Family / Caretaker
+                </button>
+            </div>
+
+            <!-- Tabs for Login / Register -->
+            <div class="flex border-b border-slate-200 mt-5 mb-4">
+                <button onclick="switchAuthTab('login')" id="tab-login" class="flex-1 pb-2 text-sm font-bold text-teal-700 border-b-2 border-teal-600 transition">Login</button>
+                <button onclick="switchAuthTab('register')" id="tab-register" class="flex-1 pb-2 text-sm font-bold text-slate-400 transition">New Registration</button>
+            </div>
+
+            <!-- Login Form -->
+            <div id="form-login" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Registered Email *</label>
+                    <input type="email" id="login-email" value="rameshwar@example.com" required class="w-full border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">4-Digit Security Passcode *</label>
+                    <input type="password" id="login-passcode" maxlength="4" value="1234" required class="w-full text-center text-xl tracking-[0.5em] font-bold py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                </div>
+                <button onclick="handleLogin()" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 rounded-xl shadow-lg transition text-sm">
+                    <i class="fa-solid fa-lock-open mr-2"></i> Verify & Access Portal
+                </button>
+            </div>
+
+            <!-- Registration Form -->
+            <div id="form-register" class="space-y-3 hidden">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Patient Full Name *</label>
+                    <input type="text" id="reg-name" placeholder="e.g., Rameshwar Sharma" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Age *</label>
+                        <input type="number" id="reg-age" value="74" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Blood Group</label>
+                        <input type="text" id="reg-bg" value="O+" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Patient / Login Email *</label>
+                    <input type="email" id="reg-user-email" placeholder="patient@example.com" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Caretaker / Family Email (For Alerts) *</label>
+                    <input type="email" id="reg-caretaker-email" placeholder="family@example.com" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Set 4-Digit Passcode *</label>
+                    <input type="password" id="reg-passcode" maxlength="4" value="1234" class="w-full text-center font-bold tracking-widest py-2 border border-slate-300 rounded-xl text-sm">
+                </div>
+                <button onclick="handleRegister()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl shadow transition text-sm">
+                    <i class="fa-solid fa-user-plus mr-2"></i> Register Account
+                </button>
+            </div>
+            <p class="text-[11px] text-slate-400 text-center mt-4">Demo Login: <strong>rameshwar@example.com</strong> | Passcode: <strong>1234</strong></p>
+        </div>
+    </div>
+
+    <!-- Main Dashboard Container -->
+    <div id="main-app" class="hidden min-h-screen flex flex-col">
+        
+        <!-- Top Navigation Bar -->
+        <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-teal-600 text-white rounded-xl flex items-center justify-center text-xl shadow">
+                        <i class="fa-solid fa-heart-pulse"></i>
+                    </div>
+                    <div>
+                        <span class="font-extrabold text-xl text-slate-900 tracking-tight">CarePulse Pro</span>
+                        <span id="role-indicator" class="ml-2 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-teal-100 text-teal-800">Elderly View</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button onclick="openVideoConsultModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold px-3 py-2 rounded-lg shadow transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-video"></i> Live Video Consult
+                    </button>
+                    <button onclick="triggerRealSOS()" class="bg-rose-600 hover:bg-rose-700 text-white text-xs sm:text-sm font-bold px-3 py-2 rounded-lg shadow animate-pulse flex items-center gap-1.5">
+                        <i class="fa-solid fa-bell"></i> Emergency SOS
+                    </button>
+                    <button onclick="lockPortal()" title="Logout / Switch Account" class="text-slate-500 hover:text-slate-800 p-2"><i class="fa-solid fa-right-from-bracket"></i></button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Profile Banner -->
+        <div class="bg-gradient-to-r from-teal-700 to-emerald-800 text-white py-6 px-4 sm:px-6 lg:px-8 shadow-inner">
+            <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <div id="profile-avatar" class="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center text-3xl font-bold border border-white/30">RS</div>
+                    <div>
+                        <h2 id="profile-name-age" class="text-2xl font-bold">Rameshwar Sharma, 74</h2>
+                        <p class="text-teal-100 text-sm"><i class="fa-solid fa-envelope mr-1"></i> Caretaker Email: <span id="caretaker-email-display" class="font-bold underline">family@example.com</span></p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="sendProactiveEmailAlert()" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold text-xs px-4 py-3 rounded-xl shadow-lg transition flex items-center gap-2">
+                        <i class="fa-solid fa-paper-plane"></i> Send Proactive Email Report
+                    </button>
+                    <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-5 py-2.5 flex items-center gap-3">
+                        <div>
+                            <p class="text-[10px] text-teal-100 uppercase font-semibold">Adherence</p>
+                            <p id="adherence-percentage" class="text-2xl font-extrabold text-white">0%</p>
+                        </div>
+                        <div class="w-10 h-10 rounded-full border-2 border-emerald-300 flex items-center justify-center text-xs font-bold" id="adherence-count">0/0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Workspace -->
+        <main class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 flex-1">
+            
+            <!-- Voice Assistant (Hindi & English Q&A) -->
+            <div class="mb-6 bg-gradient-to-r from-slate-900 to-teal-950 text-white p-5 rounded-2xl shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center text-2xl text-teal-300">
+                        <i class="fa-solid fa-microphone-lines"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-base">Bilingual Voice Assistant (हिंदी और अंग्रेजी वॉयस असिस्टेंट)</h3>
+                        <p class="text-xs text-slate-300">Ask about upcoming or missed medicines in Hindi or English</p>
+                    </div>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="askVoiceAssistant('hindi')" class="bg-teal-600 hover:bg-teal-700 text-xs font-bold px-4 py-2.5 rounded-xl transition">
+                        🗣️ "अगली दवाई कब लेनी है?"
+                    </button>
+                    <button onclick="askVoiceAssistant('english')" class="bg-white/10 hover:bg-white/20 text-xs font-bold px-4 py-2.5 rounded-xl transition">
+                        🗣️ "Check Next & Missed Meds"
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <!-- Left 2 Cols -->
+                <div class="lg:col-span-2 space-y-6">
+                    
+                    <!-- Daily Care Checklist -->
+                    <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
+                                <i class="fa-solid fa-clipboard-check text-teal-600"></i> Daily Care Routine Checklist
+                            </h3>
+                            <span class="text-xs text-slate-500 font-semibold" id="checklist-progress">0/4 Completed</span>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="checklist-container"></div>
+                    </div>
+
+                    <!-- Medications Section -->
+                    <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+                        <div>
+                            <h3 class="text-xl font-extrabold text-slate-900 flex items-center gap-2">
+                                <i class="fa-solid fa-pills text-teal-600"></i> Medication Schedule & Inventory
+                            </h3>
+                            <p class="text-xs text-slate-500">Auto-detects Missed Doses & tracks accurate pill stock</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="openCameraScanner()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3.5 py-2.5 rounded-xl shadow flex items-center gap-1.5">
+                                <i class="fa-solid fa-camera"></i> Live Camera Scan
+                            </button>
+                            <button onclick="openMedModal()" class="bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow flex items-center gap-1.5">
+                                <i class="fa-solid fa-plus"></i> Add Med
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="medication-list" class="space-y-4"></div>
+
+                    <!-- Caretaker Logs -->
+                    <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+                        <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2 mb-3">
+                            <i class="fa-solid fa-envelope-circle-check text-blue-600"></i> Proactive Notification & Audit Trail
+                        </h4>
+                        <div id="email-log-list" class="space-y-2 max-h-40 overflow-y-auto text-xs"></div>
+                    </div>
+                </div>
+
+                <!-- Right 1 Col -->
+                <div class="space-y-6">
+                    <!-- Doctor Appointments -->
+                    <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
+                                <i class="fa-solid fa-calendar-check text-indigo-600"></i> Doctor Appointments
+                            </h3>
+                            <button onclick="openApptModal()" class="text-xs bg-indigo-50 text-indigo-700 font-bold px-3 py-1.5 rounded-lg">+ Add</button>
+                        </div>
+                        <div id="appointment-list" class="space-y-3"></div>
+                    </div>
+
+                    <!-- Health Vitals (Both BP & Sugar Updatable) -->
+                    <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+                        <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2 mb-3">
+                            <i class="fa-solid fa-stethoscope text-rose-600"></i> Health Vitals Monitor
+                        </h3>
+                        <div class="grid grid-cols-2 gap-3 mb-3">
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="text-[11px] text-slate-500 block">Blood Pressure</span>
+                                <span id="bp-value" class="text-lg font-extrabold text-slate-800">124/80</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="text-[11px] text-slate-500 block">Fasting Sugar</span>
+                                <span id="sugar-value" class="text-lg font-extrabold text-slate-800">108 mg/dL</span>
+                            </div>
+                        </div>
+                        <button onclick="openVitalsModal()" class="w-full py-2.5 text-xs font-bold text-white bg-slate-800 hover:bg-slate-900 rounded-xl transition">
+                            <i class="fa-solid fa-pen-to-square mr-1"></i> Update BP & Sugar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal: Update Vitals (BP + Sugar) -->
+    <div id="vitals-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl">
+            <h3 class="text-lg font-extrabold text-slate-900 mb-4">Update Health Vitals</h3>
+            <form onsubmit="saveVitals(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Blood Pressure (mmHg) *</label>
+                    <input type="text" id="input-bp" required value="124/80" placeholder="e.g., 120/80" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Fasting Blood Sugar (mg/dL) *</label>
+                    <input type="number" id="input-sugar" required value="108" placeholder="e.g., 105" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm">
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeVitalsModal()" class="px-4 py-2 text-sm text-slate-600">Cancel</button>
+                    <button type="submit" class="px-5 py-2 text-sm font-bold bg-teal-600 text-white rounded-xl">Save Vitals</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Live Video Consultation (Real Webcam Feed) -->
+    <div id="video-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 rounded-3xl max-w-2xl w-full p-6 text-white border border-slate-700 shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg text-teal-400"><i class="fa-solid fa-video mr-2"></i> Live Doctor Video Consultation</h3>
+                <button onclick="closeVideoConsultModal()" class="text-slate-400 hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="bg-slate-950 rounded-2xl h-72 relative overflow-hidden border border-slate-800 flex items-center justify-center">
+                <video id="consult-video-feed" autoplay playsinline muted class="w-full h-full object-cover"></video>
+                <div class="absolute top-3 left-3 bg-rose-600 text-[10px] font-bold px-2.5 py-1 rounded-full animate-pulse flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-white"></span> Live Encrypted Camera Feed
+                </div>
+                <div class="absolute bottom-3 left-3 bg-slate-900/80 backdrop-blur px-3 py-1.5 rounded-xl border border-slate-700">
+                    <p class="text-xs font-bold text-white">Dr. Arvind Kulkarni (Cardiologist)</p>
+                    <p class="text-[10px] text-emerald-400">Connected & Monitoring Vitals</p>
+                </div>
+            </div>
+            <div class="flex justify-center gap-4 mt-5">
+                <button onclick="closeVideoConsultModal()" class="px-6 py-2.5 rounded-full bg-rose-600 hover:bg-rose-700 text-white font-bold text-sm shadow">
+                    <i class="fa-solid fa-phone-slash mr-2"></i> End Call
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Live Camera Medicine Scanner -->
+    <div id="scanner-modal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 text-center shadow-2xl">
+            <h3 class="text-lg font-extrabold text-slate-900 mb-1">Live Camera Strip Scanner</h3>
+            <p class="text-xs text-slate-500 mb-3">Hold medicine strip in front of camera to scan barcode</p>
+            
+            <div class="bg-slate-950 rounded-2xl h-48 mb-4 relative overflow-hidden flex items-center justify-center border-2 border-indigo-500">
+                <video id="scanner-video-feed" autoplay playsinline muted class="w-full h-full object-cover"></video>
+                <div class="absolute inset-x-4 h-0.5 bg-rose-500 animate-ping top-1/2"></div>
+            </div>
+
+            <div class="space-y-2">
+                <button onclick="captureScannedMedicine('Amlodipine 5mg (Scanned)', 'Morning', '09:00', 14)" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow">
+                    <i class="fa-solid fa-camera mr-1"></i> Capture & Extract Medicine Info
+                </button>
+                <button onclick="closeCameraScanner()" class="w-full py-2 text-xs text-slate-600">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Add Medication -->
+    <div id="med-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-extrabold text-slate-900">Add Medication</h3>
+                <button onclick="closeMedModal()" class="text-slate-400"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <form onsubmit="saveMedication(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Medicine Name *</label>
+                    <input type="text" id="med-name" required placeholder="e.g., Telmisartan 40mg" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Slot</label>
+                        <select id="med-slot" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm">
+                            <option value="Morning">Morning</option>
+                            <option value="Afternoon">Afternoon</option>
+                            <option value="Night">Night</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Time</label>
+                        <input type="time" id="med-time" value="08:30" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Initial Stock (Pills)</label>
+                        <input type="number" id="med-stock" value="10" min="1" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Status</label>
+                        <select id="med-status" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm">
+                            <option value="pending">Pending / Upcoming</option>
+                            <option value="missed">Missed Dose</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Instructions</label>
+                    <input type="text" id="med-instruction" placeholder="After breakfast" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm">
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeMedModal()" class="px-4 py-2 text-sm font-semibold text-slate-600">Cancel</button>
+                    <button type="submit" class="px-5 py-2 text-sm font-bold bg-teal-600 text-white rounded-xl">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Doctor Appointment -->
+    <div id="appt-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-extrabold text-slate-900">Schedule Appointment</h3>
+                <button onclick="closeApptModal()" class="text-slate-400"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <form onsubmit="saveAppointment(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Doctor Name *</label>
+                    <input type="text" id="appt-doctor" required placeholder="Dr. S. K. Verma" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Date *</label>
+                        <input type="date" id="appt-date" required class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Time *</label>
+                        <input type="time" id="appt-time" required value="11:00" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm">
+                    </div>
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeApptModal()" class="px-4 py-2 text-sm font-semibold text-slate-600">Cancel</button>
+                    <button type="submit" class="px-5 py-2 text-sm font-bold bg-indigo-600 text-white rounded-xl">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 space-y-2"></div>
+    <script src="app.js"></script>
+</body>
+</html>
